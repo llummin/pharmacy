@@ -53,6 +53,11 @@ cmake-build-*/
 # IntelliJ
 out/
 
+# Node.js
+node_modules/
+dist/
+.env
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
