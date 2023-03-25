@@ -121,14 +121,14 @@ const Navbar: React.FC = () => {
 					</IconButton>
 					<Link to="/" className={classes.link}>
 						<Typography variant="h6" className={classes.title}>
-							Pharmacy
+							Здоровый выбор
 						</Typography>
 					</Link>
 					<div className={classes.grow} />
 					<div className={classes.rightIcons}>
 						<Link to="/cart" className={classes.link}>
 							<IconButton color="inherit">
-								<Badge badgeContent={4} color="secondary">
+								<Badge badgeContent={3} color="secondary">
 									<ShoppingCartIcon />
 								</Badge>
 							</IconButton>
