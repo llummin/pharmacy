@@ -1,10 +1,12 @@
 import React from 'react';
-import './styles/App.css';
+import PhoneAuthPage from '../pages/PhoneAuthPage';
 
 function App() {
-  return (
-    <h1>Добро пожаловать!</h1>
-  );
+	return (
+		<div className="App">
+			<PhoneAuthPage/>
+		</div>
+	);
 }
 
 export default App;
