@@ -1,20 +1,26 @@
 {
-  "name": "backend",
+  "name": "pharmacy",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node server.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Maxim Elushev",
+  "author": "Elushev Maxim",
   "license": "ISC",
   "dependencies": {
     "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.13",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
-    "body-parser": "^1.20.1",
+    "@types/mongoose": "^5.11.97",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "typescript": "^4.9.5"
+    "mongoose": "^7.0.3"
+  },
+  "compilerOptions": {
+    "esModuleInterop": true
   }
 }

@@ -9,15 +9,15 @@ const port = process.env.PORT;
 const uri = process.env.DB_CONN_STRING!;
 
 mongoose.connect(uri).then(() => {
-    console.log('Connected to MongoDB');
+	console.log('Подключено к MongoDB');
 }).catch((error) => {
-    console.error(error);
+	console.error(error);
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello, world!');
+	res.send('Hello, world!');
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+	console.log(`Сервер запущен на порте ${port}`);
 });
