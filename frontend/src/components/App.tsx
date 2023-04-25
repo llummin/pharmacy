@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PhoneAuthPage from '../pages/PhoneAuthPage';
 import CartPage from '../pages/CartPage';
-import Home from '../pages/Home';
+import HomePage from '../pages/HomePage';
 
 function App() {
 	return (
@@ -14,7 +14,7 @@ function App() {
 			<Routes>
 				<Route path="/login" element={<PhoneAuthPage/>}/>
 				<Route path="/cart" element={<CartPage/>}/>
-				<Route path="/" element={<Home/>}/>
+				<Route path="/" element={<HomePage/>}/>
 			</Routes>
 			<Footer/>
 		</BrowserRouter>

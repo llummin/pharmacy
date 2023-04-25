@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1,
+		backgroundColor: '#319e9a'
 	},
 	menuButton: {
 		marginRight: theme.spacing(2),

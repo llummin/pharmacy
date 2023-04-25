@@ -17,12 +17,14 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		paddingTop: theme.spacing(4),
 		paddingBottom: theme.spacing(4),
+		width: 710,
 	},
 	table: {
-		minWidth: 650,
+		width: 650,
 	},
 	button: {
 		marginTop: theme.spacing(2),
+		backgroundColor: '#319e9a'
 	},
 }));
 
