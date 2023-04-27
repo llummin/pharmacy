@@ -1,24 +1,21 @@
 import userService from "../services/UserService";
 import {validationResult} from "express-validator";
 import ApiError from "../exceptions/ApiError";
+import {NextFunction, Request, Response} from "express";
 
 class UserController {
-    public async registration(request: any, response: any, next: any): Promise<void> {
+    public async registration(request: Request, response: Response, next: NextFunction) {
         try {
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
             }
             const {email, password} = request.body;
-            const userData: {
-                tokens: { accessToken: string; refreshToken: string };
-                user: { isActivated: any; userId: string; email: any }
-            } = await userService.registration(email, password);
+            const userData = await userService.registration(email, password);
 
             response.cookie('refreshToken', userData.tokens.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                secure: true
             })
 
             return response.json(userData);
@@ -27,18 +24,14 @@ class UserController {
         }
     }
 
-    public async login(request: any, response: any, next: any): Promise<void> {
+    public async login(request: Request, response: Response, next: NextFunction) {
         try {
             const {email, password} = request.body;
-            const userData: {
-                tokens: { accessToken: string; refreshToken: string };
-                user: { isActivated: any; userId: string; email: any }
-            } = await userService.login(email, password);
+            const userData = await userService.login(email, password);
 
             response.cookie('refreshToken', userData.tokens.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                secure: true
             })
 
             return response.json(userData);
@@ -47,7 +40,7 @@ class UserController {
         }
     }
 
-    public async logout(request: any, response: any, next: any): Promise<void> {
+    public async logout(request: Request, response: Response, next: NextFunction) {
         try {
             const {refreshToken} = request.cookies;
             const token = await userService.logout(refreshToken);
@@ -58,25 +51,32 @@ class UserController {
         }
     }
 
-    public async activate(request: any, response: any, next: any): Promise<void> {
+    public async activate(request: Request, response: Response, next: NextFunction) {
         try {
-            const activationLink = request.params.link;
+            const activationLink: string = request.params.link;
+            if (!activationLink) {
+                return next(ApiError.BadRequest('Ссылка на активацию не передана'));
+            }
             await userService.activate(activationLink);
+
+            if (!process.env.CLIENT_URL) {
+                return next(ApiError.BadRequest('Не указан URL клиента'));
+            }
+
             return response.redirect(process.env.CLIENT_URL);
         } catch (e) {
             next(e);
         }
     }
 
-    public async refresh(request: any, response: any, next: any): Promise<void> {
+    public async refresh(request: Request, response: Response, next: NextFunction) {
         try {
             const {refreshToken} = request.cookies;
             const userData: any = await userService.refresh(refreshToken);
 
-            response.cookie('refreshToken', userData.tokens.refreshToken, {
+            response.cookie('refreshToken', userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                secure: true
             })
 
             return response.json(userData);
@@ -85,9 +85,10 @@ class UserController {
         }
     }
 
-    async getUsers(request: any, response: any, next: any): Promise<void> {
+    async getUsers(request: Request, response: Response, next: NextFunction) {
         try {
-            response.json(['123', '456']);
+            const users = await userService.getAllUsers();
+            return response.json(users);
         } catch (e) {
             next(e);
         }

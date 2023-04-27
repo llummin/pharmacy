@@ -3,9 +3,10 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import UserController from './controllers/UserController';
+import userController from "./controllers/UserController";
 import errorHandler from './middlewares/ErrorMiddleware';
 import {body} from 'express-validator';
+import authMiddleware from "./middlewares/AuthMiddleware";
 
 dotenv.config();
 
@@ -26,13 +27,13 @@ mongoose.connect(uri).then((): void => {
 app.post('/registration',
     body('email').isEmail(),
     body('password').isLength({min: 3, max: 30}),
-    UserController.registration
+    userController.registration
 );
-app.post('/login', UserController.login);
-app.post('/logout', UserController.logout);
-app.get('/activate/:link', UserController.activate);
-app.get('/refresh', UserController.refresh);
-app.get('/users', UserController.getUsers);
+app.post('/login', userController.login);
+app.post('/logout', userController.logout);
+app.get('/activate/:link', userController.activate);
+app.get('/refresh', userController.refresh);
+app.get('/users', authMiddleware, userController.getUsers);
 
 app.use(errorHandler);
 

@@ -20,17 +20,17 @@ export class TokenService {
         };
     }
 
-    validateAccessToken({token}: { token: any }) {
+    validateAccessToken(accessToken: string) {
         try {
-            return jwt.verify(token, process.env.JWT_ACCESS_SECRET as Secret);
+            return jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as Secret);
         } catch (e) {
             return null;
         }
     }
 
-    validateRefreshToken({token}: { token: any }) {
+    validateRefreshToken(refreshToken: string) {
         try {
-            return jwt.verify(token, process.env.JWT_REFRESH_SECRET as Secret);
+            return jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as Secret);
         } catch (e) {
             return null;
         }

@@ -4,7 +4,6 @@ import tokenService from "./TokenService";
 import bcrypt from 'bcrypt';
 import {v4 as uuid} from 'uuid';
 import ApiError from "../exceptions/ApiError";
-import User from "../models/User";
 
 export class UserService {
     public async registration(email: string, password: string) {
@@ -24,10 +23,10 @@ export class UserService {
             email: user.email,
             isActivated: user.isActivated
         };
-        const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
+        const tokens = tokenService.generateTokens(userObject);
         await tokenService.saveToken(userObject.userId, tokens.refreshToken);
 
-        return {user: userObject, tokens};
+        return {tokens, user: userObject};
     }
 
     public async activate(activationLink: any): Promise<void> {
@@ -40,11 +39,11 @@ export class UserService {
     }
 
     public async login(email: string, password: string) {
-        const user: IUser | null = await userModel.findOne({email});
+        const user = await userModel.findOne({email});
         if (!user) {
             throw ApiError.BadRequest('Пользователь с таким email не найден')
         }
-        const isPassEquals: boolean = await bcrypt.compare(password, user.password);
+        const isPassEquals = await bcrypt.compare(password, user.password);
         if (!isPassEquals) {
             throw ApiError.BadRequest('Неверный пароль');
         }
@@ -53,17 +52,17 @@ export class UserService {
             email: user.email,
             isActivated: user.isActivated
         };
-        const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
+        const tokens = tokenService.generateTokens(userObject);
         await tokenService.saveToken(userObject.userId, tokens.refreshToken);
 
         return {user: userObject, tokens};
     }
 
-    async logout(refreshToken: any) {
+    async logout(refreshToken: string) {
         return await tokenService.removeToken(refreshToken);
     }
 
-    async refresh(refreshToken: any) {
+    async refresh(refreshToken: string) {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError();
         }
@@ -74,16 +73,20 @@ export class UserService {
             throw ApiError.UnauthorizedError();
         }
 
-        const user = await User.findById(typeof userData === 'string' ? userData : userData.id);
+        const user = typeof userData === 'object' ? await userModel.findById(userData.id) : null;
         const userObject: { isActivated: any; userId: string; email: any } = {
             userId: user?._id.toString(),
             email: user?.email,
             isActivated: user?.isActivated
         };
-        const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
+        const tokens = tokenService.generateTokens(userObject);
         await tokenService.saveToken(userObject.userId, tokens.refreshToken);
 
-        return {user: userObject, tokens};
+        return {tokens, user: userObject};
+    }
+
+    async getAllUsers() {
+        return userModel.find();
     }
 }
 
