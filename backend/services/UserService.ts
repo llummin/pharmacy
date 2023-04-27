@@ -4,6 +4,7 @@ import tokenService from "./TokenService";
 import bcrypt from 'bcrypt';
 import {v4 as uuid} from 'uuid';
 import ApiError from "../exceptions/ApiError";
+import User from "../models/User";
 
 export class UserService {
     public async registration(email: string, password: string) {
@@ -51,6 +52,33 @@ export class UserService {
             userId: user._id.toString(),
             email: user.email,
             isActivated: user.isActivated
+        };
+        const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
+        await tokenService.saveToken(userObject.userId, tokens.refreshToken);
+
+        return {user: userObject, tokens};
+    }
+
+    async logout(refreshToken: any) {
+        return await tokenService.removeToken(refreshToken);
+    }
+
+    async refresh(refreshToken: any) {
+        if (!refreshToken) {
+            throw ApiError.UnauthorizedError();
+        }
+
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        const tokenFromDb = await tokenService.findToken(refreshToken);
+        if (!userData || !tokenFromDb) {
+            throw ApiError.UnauthorizedError();
+        }
+
+        const user = await User.findById(typeof userData === 'string' ? userData : userData.id);
+        const userObject: { isActivated: any; userId: string; email: any } = {
+            userId: user?._id.toString(),
+            email: user?.email,
+            isActivated: user?.isActivated
         };
         const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
         await tokenService.saveToken(userObject.userId, tokens.refreshToken);

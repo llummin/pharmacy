@@ -49,7 +49,10 @@ class UserController {
 
     public async logout(request: any, response: any, next: any): Promise<void> {
         try {
-
+            const {refreshToken} = request.cookies;
+            const token = await userService.logout(refreshToken);
+            response.clearCookie('refreshToken');
+            return response.json(token);
         } catch (e) {
             next(e);
         }
@@ -67,7 +70,16 @@ class UserController {
 
     public async refresh(request: any, response: any, next: any): Promise<void> {
         try {
+            const {refreshToken} = request.cookies;
+            const userData: any = await userService.refresh(refreshToken);
 
+            response.cookie('refreshToken', userData.tokens.refreshToken, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+                secure: true
+            })
+
+            return response.json(userData);
         } catch (e) {
             next(e);
         }

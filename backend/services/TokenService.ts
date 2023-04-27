@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, {Secret} from 'jsonwebtoken';
 import tokenModel, {IToken} from "../models/Token";
 
 interface ITokenPayload {
@@ -20,6 +20,22 @@ export class TokenService {
         };
     }
 
+    validateAccessToken({token}: { token: any }) {
+        try {
+            return jwt.verify(token, process.env.JWT_ACCESS_SECRET as Secret);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    validateRefreshToken({token}: { token: any }) {
+        try {
+            return jwt.verify(token, process.env.JWT_REFRESH_SECRET as Secret);
+        } catch (e) {
+            return null;
+        }
+    }
+
     async saveToken(userId: string, refreshToken: string): Promise<IToken> {
         const tokenData = await tokenModel.findOne({user: userId});
 
@@ -28,6 +44,14 @@ export class TokenService {
             return tokenData.save();
         }
         return await tokenModel.create({user: userId, refreshToken});
+    }
+
+    async removeToken(refreshToken: string) {
+        return tokenModel.deleteOne({refreshToken});
+    }
+
+    async findToken(refreshToken: string) {
+        return tokenModel.findOne({refreshToken});
     }
 }
 
