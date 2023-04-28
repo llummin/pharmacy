@@ -20,7 +20,6 @@ app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }));
-app.use('/api');
 
 mongoose.connect(uri).then((): void => {
     console.log('Подключено к MongoDB');
@@ -42,5 +41,5 @@ app.get('/users', authMiddleware, userController.getUsers);
 app.use(errorHandler);
 
 app.listen(port, (): void => {
-    console.log(`Сервер запущен на порте ${port}`);
+    console.log(`Сервер запущен  на порте ${port}`);
 });
