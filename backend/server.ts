@@ -16,7 +16,11 @@ const uri: string = process.env.DB_CONN_STRING!;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: process.env.CLIENT_URL
+}));
+app.use('/api');
 
 mongoose.connect(uri).then((): void => {
     console.log('Подключено к MongoDB');
