@@ -2,7 +2,7 @@ import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
 import Store from "./store/Store";
 import "../src/assets/input.css"
-import CategoryList from "./components/CategoryList";
+import CategoryFilter from "./components/CategoryFilter";
 
 interface State {
     store: Store,
@@ -16,7 +16,7 @@ export const Context = createContext<State>({
 
 ReactDOM.render(
     <Context.Provider value={{store}}>
-        <CategoryList/>
+        <CategoryFilter/>
     </Context.Provider>,
     document.getElementById('root')
 );
