@@ -1,7 +1,6 @@
 import React, {FC, useContext, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
-import "../assets/style.css"
 
 const LoginForm: FC = () => {
     const [email, setEmail] = useState<string>('')
@@ -75,7 +74,7 @@ const LoginForm: FC = () => {
                             <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                                onClick={() => store.registration(email, password)}
                             >
-                                Зарегестрироваться
+                                Зарегистрироваться
                             </a>
                         </p>
                     </form>

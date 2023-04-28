@@ -2,8 +2,8 @@ import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Store from "./store/Store";
-import "../src/assets/style.css"
 import "../src/assets/input.css"
+import ProductList from "./components/ProductList";
 
 interface State {
     store: Store,
@@ -17,7 +17,7 @@ export const Context = createContext<State>({
 
 ReactDOM.render(
     <Context.Provider value={{store}}>
-        <App/>
+        <ProductList/>
     </Context.Provider>,
     document.getElementById('root')
 );
