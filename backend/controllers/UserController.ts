@@ -1,7 +1,7 @@
 import userService from "../services/UserService";
 
 class UserController {
-    async registration(request: any, response: any, next: any): Promise<void> {
+    public async registration(request: any, response: any, next: any): Promise<void> {
         try {
             const {email, password} = request.body;
             const userData: {
@@ -17,39 +17,41 @@ class UserController {
 
             return response.json(userData);
         } catch (e) {
-            console.log(e);
+            next(e);
         }
     }
 
-    async login(request: any, response: any, next: any): Promise<void> {
+    public async login(request: any, response: any, next: any): Promise<void> {
         try {
 
         } catch (e) {
-
+            next(e);
         }
     }
 
-    async logout(request: any, response: any, next: any): Promise<void> {
+    public async logout(request: any, response: any, next: any): Promise<void> {
         try {
 
         } catch (e) {
-
+            next(e);
         }
     }
 
-    async activate(request: any, response: any, next: any): Promise<void> {
+    public async activate(request: any, response: any, next: any): Promise<void> {
         try {
-
+            const activationLink = request.params.link;
+            await userService.activate(activationLink);
+            return response.redirect(process.env.CLIENT_URL);
         } catch (e) {
-
+            next(e);
         }
     }
 
-    async refresh(request: any, response: any, next: any): Promise<void> {
+    public async refresh(request: any, response: any, next: any): Promise<void> {
         try {
 
         } catch (e) {
-
+            next(e);
         }
     }
 
@@ -57,7 +59,7 @@ class UserController {
         try {
             response.json(['123', '456']);
         } catch (e) {
-
+            next(e);
         }
     }
 }

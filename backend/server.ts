@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import UserController from "./controllers/UserController";
+import errorHandler from "./middlewares/ErrorMiddleware";
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.post('/logout', UserController.logout);
 app.get('/activate/:link', UserController.activate);
 app.get('/refresh', UserController.refresh);
 app.get('/users', UserController.getUsers);
+
+app.use(errorHandler);
 
 app.listen(port, (): void => {
     console.log(`Сервер запущен на порте ${port}`);
