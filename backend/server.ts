@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userController from "./controllers/UserController";
+import UserController from "./controllers/UserController";
 
 dotenv.config();
 
@@ -21,12 +21,12 @@ mongoose.connect(uri).then((): void => {
     console.error(error);
 });
 
-app.post('/registration', userController.registration);
-app.post('/login', userController.login);
-app.post('/logout', userController.logout);
-app.get('/activate/:link', userController.activate);
-app.get('/refresh', userController.refresh);
-app.get('/users', userController.getUsers);
+app.post('/registration', UserController.registration);
+app.post('/login', UserController.login);
+app.post('/logout', UserController.logout);
+app.get('/activate/:link', UserController.activate);
+app.get('/refresh', UserController.refresh);
+app.get('/users', UserController.getUsers);
 
 app.listen(port, (): void => {
     console.log(`Сервер запущен на порте ${port}`);
