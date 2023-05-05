@@ -1,9 +1,23 @@
+import userService from "../services/UserService";
+
 class UserController {
     async registration(request: any, response: any, next: any): Promise<void> {
         try {
+            const {email, password} = request.body;
+            const userData: {
+                tokens: { accessToken: string; refreshToken: string };
+                user: { isActivated: any; userId: string; email: any }
+            } = await userService.registration(email, password);
 
+            response.cookie('refreshToken', userData.tokens.refreshToken, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+                secure: true
+            })
+
+            return response.json(userData);
         } catch (e) {
-
+            console.log(e);
         }
     }
 
