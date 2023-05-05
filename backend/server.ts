@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import router from "./routers/index";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const uri = process.env.DB_CONN_STRING!;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors)
+app.use('/api', router)
 
 mongoose.connect(uri).then(() => {
     console.log('Подключено к MongoDB');
