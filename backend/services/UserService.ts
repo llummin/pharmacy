@@ -15,7 +15,7 @@ export class UserService {
         const activationLink: string = uuid();
 
         const user = await userModel.create({email, password: hashPassword, activationLink});
-        await mailService.sendActivationMail(email, activationLink);
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/activate/${activationLink}`);
 
         const userObject: { isActivated: any; userId: string; email: any } = {
             userId: user._id.toString(),

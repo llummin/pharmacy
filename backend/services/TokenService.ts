@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import tokenModel, {IToken} from "../models/Token";
-
-dotenv.config();
 
 interface ITokenPayload {
     userId: string;
