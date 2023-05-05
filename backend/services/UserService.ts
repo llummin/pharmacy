@@ -37,6 +37,26 @@ export class UserService {
         user.isActivated = true;
         await user.save();
     }
+
+    public async login(email: string, password: string) {
+        const user: IUser | null = await userModel.findOne({email});
+        if (!user) {
+            throw ApiError.BadRequest('Пользователь с таким email не найден')
+        }
+        const isPassEquals: boolean = await bcrypt.compare(password, user.password);
+        if (!isPassEquals) {
+            throw ApiError.BadRequest('Неверный пароль');
+        }
+        const userObject: { isActivated: any; userId: string; email: any } = {
+            userId: user._id.toString(),
+            email: user.email,
+            isActivated: user.isActivated
+        };
+        const tokens: { accessToken: string; refreshToken: string } = tokenService.generateTokens(userObject);
+        await tokenService.saveToken(userObject.userId, tokens.refreshToken);
+
+        return {user: userObject, tokens};
+    }
 }
 
 export default new UserService();
